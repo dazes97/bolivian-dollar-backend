@@ -1,0 +1,9 @@
+# package directories
+/**/jspm_packages
+/**/node_modules
+/**/.esbuild
+/**/serverless.yml
+/**/package-lock.json
+/**/.serverless
+# Serverless directories
+.serverless
