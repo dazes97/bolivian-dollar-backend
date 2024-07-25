@@ -1,4 +1,4 @@
-import { P2pParsedResponse, P2pRequestOptions } from "../interfaces/binance";
+import { P2pParsedResponse, P2pRequestOptions } from "../interfaces";
 import { DatabaseAdapater } from "../database/adapter-database";
 export class CurrentPriceService {
   private databaseAdapater: DatabaseAdapater;
@@ -10,20 +10,10 @@ export class CurrentPriceService {
     BinanceRequestOptions: P2pRequestOptions
   ): Promise<P2pParsedResponse> {
     const { fiat, tradeType, asset } = BinanceRequestOptions;
-    const [response] = await this.databaseAdapater.execute(
-      `SELECT ROUND(value,2) AS value, created_at as date, trade_type as tradeType, fiat
-      FROM 
-      price_history 
-      WHERE fiat =? AND asset =? AND trade_type =? AND deleted_at IS NULL ORDER BY date DESC LIMIT 1`,
-      [fiat, asset, tradeType]
+    const [response] = await this.databaseAdapater.executeStoredProcedure(
+      "CALL sp_get_current_currency_price(?,?,?)",
+      [tradeType, fiat, asset]
     );
-    return response as P2pParsedResponse;
+    return response[0][0];
   }
 }
-
-// return {
-//   value: averageValue,
-//   fiat,
-//   date: DateTime.now().toJSDate(),
-//   tradeType: tradeType,
-// };

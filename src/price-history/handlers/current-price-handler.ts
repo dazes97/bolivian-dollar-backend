@@ -1,6 +1,6 @@
 import { APIGatewayProxyResult, Handler } from "aws-lambda";
 import { CurrentPriceController } from "../controllers/current-price-controller";
-import { P2pRequestOptions } from "../interfaces/binance";
+import { P2pRequestOptions } from "../interfaces";
 import ErrorHandler from "../utils/error-handler";
 
 const currentPriceController = new CurrentPriceController();
@@ -23,6 +23,10 @@ const getCurrentDollarPrice: Handler =
     ]);
     return {
       statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(
         {
           status: "success",

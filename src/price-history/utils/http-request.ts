@@ -1,6 +1,6 @@
-import { P2pOriginalResponse, P2pRequestOptions } from "../interfaces/binance";
-import { BINANCE_URLS } from "../../../common/urls";
+import { P2pOriginalResponse, P2pRequestOptions } from "../interfaces";
 import fetch, { Response } from "node-fetch";
+import { BINANCE_URLS } from "../urls";
 import retry from "async-retry";
 
 export class BinanceRequest {

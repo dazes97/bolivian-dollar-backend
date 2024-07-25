@@ -3,8 +3,8 @@ import {
   APIGatewayProxyResult,
   Handler,
 } from "aws-lambda";
-import { P2pRequestOptions } from "../interfaces/binance";
 import { PriceHistoryController } from "../controllers/price-history-controller";
+import { P2pRequestOptions } from "../interfaces";
 import ErrorHandler from "../utils/error-handler";
 
 const priceHistoryController = new PriceHistoryController();

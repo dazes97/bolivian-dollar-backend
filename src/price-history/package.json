@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "offline": "sls offline start --stage dev noAuth --noTimeout --reloadHandler",
+    "deploy:dev": "sls deploy --verbose --debug='*' --stage dev",
+    "remove:dev": "sls remove --verbose --debug='*' --stage dev",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

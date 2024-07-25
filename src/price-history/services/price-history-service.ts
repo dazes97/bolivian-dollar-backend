@@ -1,9 +1,8 @@
-import { P2pParsedResponse, P2pRequestOptions } from "../interfaces/binance";
+import { P2pParsedResponse, P2pRequestOptions } from "../interfaces";
 import { calculateAveragePrice } from "../utils/value-calculator";
 import { DatabaseAdapater } from "../database/adapter-database";
 import { BinanceRequest } from "../utils/http-request";
 import { Datum } from "../interfaces/binance/p2p-original-response.interface";
-import { DateTime } from "luxon";
 export class PriceHistoryService {
   private databaseAdapater: DatabaseAdapater;
   constructor() {
@@ -18,7 +17,7 @@ export class PriceHistoryService {
       BinanceRequestOptions
     );
     const averageValue = calculateAveragePrice(dataToInsert).toFixed(2);
-    if (!averageValue) return;
+    if (!averageValue || Number(averageValue) === 0) return;
     await this.databaseAdapater.execute(
       "INSERT INTO price_history (value,fiat,asset,trade_type) VALUES (?,?,?,?)",
       [averageValue, fiat, asset, tradeType]
@@ -47,10 +46,3 @@ export class PriceHistoryService {
     );
   }
 }
-
-// return {
-//   value: averageValue,
-//   fiat,
-//   date: DateTime.now().toJSDate(),
-//   tradeType: tradeType,
-// };

@@ -1,8 +1,21 @@
-import { ConnectionOptions } from "mysql2";
-export const databaseConfig: ConnectionOptions = {
-  user: process.env.USERNAME,
-  database: process.env.DATABASE,
-  host: process.env.HOST,
-  password: process.env.PASSWORD,
-  timezone: process.env.TIMEZONE,
+import { PoolOptions } from "mysql2";
+export const databaseConfig = (): PoolOptions => {
+  if (process.env.IS_OFFLINE) {
+    console.log("Running in offline mode");
+    return {
+      user: "root",
+      database: "bolivian_dollar",
+      host: "localhost",
+      password: "root",
+      timezone: "-04:00",
+    };
+  } else {
+    return {
+      user: process.env.DBUSER,
+      database: process.env.DBNAME,
+      host: process.env.DBHOST,
+      password: process.env.DBPASSWORD,
+      timezone: process.env.DBTIMEZONE,
+    };
+  }
 };

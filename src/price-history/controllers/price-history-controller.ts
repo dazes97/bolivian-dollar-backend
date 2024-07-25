@@ -1,5 +1,5 @@
-import { P2pRequestOptions } from "../interfaces/binance";
 import { PriceHistoryService } from "../services/price-history-service";
+import { P2pRequestOptions } from "../interfaces";
 export class PriceHistoryController {
   private priceHistoryService: PriceHistoryService;
   constructor() {
