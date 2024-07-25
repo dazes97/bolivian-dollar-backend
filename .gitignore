@@ -5,5 +5,7 @@
 /**/serverless.yml
 /**/package-lock.json
 /**/.serverless
+/**/.env
+/**/npm
 # Serverless directories
 .serverless
