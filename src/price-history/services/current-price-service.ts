@@ -7,13 +7,23 @@ export class CurrentPriceService {
   }
 
   async getCurrentDollarPrice(
-    BinanceRequestOptions: P2pRequestOptions
+    requestOptions: P2pRequestOptions
   ): Promise<P2pParsedResponse> {
-    const { fiat, tradeType, asset } = BinanceRequestOptions;
+    const { fiat, tradeType, asset } = requestOptions;
     const [response] = await this.databaseAdapater.executeStoredProcedure(
       "CALL sp_get_current_currency_price(?,?,?)",
       [tradeType, fiat, asset]
     );
     return response[0][0];
+  }
+  async getCurrentDayDollarPrice(
+    requestOptions: P2pRequestOptions
+  ): Promise<P2pParsedResponse[]> {
+    const { fiat, tradeType, asset } = requestOptions;
+    const [response] = await this.databaseAdapater.executeStoredProcedure(
+      "CALL sp_get_current_detailed_price(?,?,?)",
+      [tradeType, fiat, asset]
+    );
+    return response[0];
   }
 }

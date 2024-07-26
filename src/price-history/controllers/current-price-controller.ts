@@ -1,15 +1,26 @@
-import { P2pParsedResponse, P2pRequestOptions } from "../interfaces";
+import { APIGatewayProxyResult } from "aws-lambda";
 import { CurrentPriceService } from "../services/current-price-service";
+import { P2pRequestOptions } from "../interfaces";
+import { responseHandler } from "../utils/response-handler";
 export class CurrentPriceController {
   private currentPriceService: CurrentPriceService;
   constructor() {
     this.currentPriceService = new CurrentPriceService();
   }
   public async getCurrentDollarPrice(
-    P2pRequestOptions: P2pRequestOptions
-  ): Promise<P2pParsedResponse> {
-    return await this.currentPriceService.getCurrentDollarPrice(
-      P2pRequestOptions
+    requestOptions: P2pRequestOptions
+  ): Promise<APIGatewayProxyResult> {
+    return responseHandler(
+      200,
+      await this.currentPriceService.getCurrentDollarPrice(requestOptions)
+    );
+  }
+  public async getCurrentDayDollarPrice(
+    requestOptions: P2pRequestOptions
+  ): Promise<APIGatewayProxyResult> {
+    return responseHandler(
+      200,
+      await this.currentPriceService.getCurrentDayDollarPrice(requestOptions)
     );
   }
 }

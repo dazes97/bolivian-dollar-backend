@@ -9,7 +9,8 @@ const ErrorHandler = (handler: Handler): Handler => {
       return {
         statusCode: 500,
         body: JSON.stringify({
-          message: "Internal Server Error",
+          status: "error",
+          message: error.message ?? "Internal Server Error",
         }),
       };
     }

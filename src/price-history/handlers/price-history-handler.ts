@@ -5,6 +5,8 @@ import {
 } from "aws-lambda";
 import { PriceHistoryController } from "../controllers/price-history-controller";
 import { P2pRequestOptions } from "../interfaces";
+import { validatorExecutor } from "../utils/validator-executor";
+import { querySchemaDto } from "../dtos/querySchema.dto";
 import ErrorHandler from "../utils/error-handler";
 
 const priceHistoryController = new PriceHistoryController();
@@ -21,55 +23,29 @@ const sellOptions: P2pRequestOptions = {
 
 const getCurrentDollarPriceScheduled: Handler =
   async (): Promise<APIGatewayProxyResult> => {
-    await Promise.all([
-      priceHistoryController.getCurrentDollarPriceScheduled(buyOptions),
-      priceHistoryController.getCurrentDollarPriceScheduled(sellOptions),
-    ]);
-    return {
-      statusCode: 200,
-      body: JSON.stringify(
-        {
-          status: "success",
-          message: "Current dollar price scheduled",
-        },
-        null,
-        2
-      ),
-    };
+    return await priceHistoryController.getCurrentDollarPriceScheduled(
+      buyOptions,
+      sellOptions
+    );
   };
 const setPreviousDayDollarPrice: Handler = async (
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> => {
-  await Promise.all([
-    priceHistoryController.setPreviousDayDollarPrice(buyOptions),
-    priceHistoryController.setPreviousDayDollarPrice(sellOptions),
-  ]);
-  return {
-    statusCode: 200,
-    body: JSON.stringify(
-      {
-        statusbar: "success",
-        message: "Previous day dollar price scheduled",
-      },
-      null,
-      2
-    ),
-  };
+  return await priceHistoryController.setPreviousDayDollarPrice(
+    buyOptions,
+    sellOptions
+  );
 };
-const getCurrentDollarPrice: Handler = async (
+const getPreviousDaysDollarPrice: Handler = async (
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> => {
-  return {
-    statusCode: 200,
-    body: JSON.stringify(
-      {
-        message: "getCurrentDollarPrice",
-        input: event,
-      },
-      null,
-      2
-    ),
-  };
+  validatorExecutor(querySchemaDto, event.queryStringParameters);
+  const requestOptions =
+    event.queryStringParameters as unknown as P2pRequestOptions;
+  return await priceHistoryController.getPreviousDaysDollarPrice(
+    30,
+    requestOptions
+  );
 };
 
 module.exports.getCurrentDollarPriceScheduled = ErrorHandler(
@@ -78,4 +54,6 @@ module.exports.getCurrentDollarPriceScheduled = ErrorHandler(
 module.exports.setPreviousDayDollarPrice = ErrorHandler(
   setPreviousDayDollarPrice
 );
-module.exports.getCurrentDollarPrice = ErrorHandler(getCurrentDollarPrice);
+module.exports.getPreviousDaysDollarPrice = ErrorHandler(
+  getPreviousDaysDollarPrice
+);

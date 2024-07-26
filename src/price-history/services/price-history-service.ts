@@ -19,8 +19,8 @@ export class PriceHistoryService {
     const averageValue = calculateAveragePrice(dataToInsert).toFixed(2);
     if (!averageValue || Number(averageValue) === 0) return;
     await this.databaseAdapater.execute(
-      "INSERT INTO price_history (value,fiat,asset,trade_type) VALUES (?,?,?,?)",
-      [averageValue, fiat, asset, tradeType]
+      "CALL sp_store_schedule_day_price(?,?,?,?)",
+      [averageValue, tradeType, fiat, asset]
     );
   }
   public async getBinanceMarketPrice(
@@ -44,5 +44,17 @@ export class PriceHistoryService {
       "CALL sp_store_previous_day_price(?,?,?)",
       [tradeType, fiat, asset]
     );
+  }
+
+  async getPreviousDaysDollarPrice(
+    days: number,
+    options: P2pRequestOptions
+  ): Promise<P2pParsedResponse[]> {
+    const { fiat, tradeType, asset } = options;
+    const [response] = await this.databaseAdapater.execute(
+      "CALL sp_get_previous_days_price(?,?,?,?)",
+      [days, tradeType, fiat, asset]
+    );
+    return response[0];
   }
 }

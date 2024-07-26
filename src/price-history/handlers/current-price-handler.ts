@@ -1,42 +1,35 @@
-import { APIGatewayProxyResult, Handler } from "aws-lambda";
+import {
+  APIGatewayProxyEvent,
+  APIGatewayProxyResult,
+  Handler,
+} from "aws-lambda";
 import { CurrentPriceController } from "../controllers/current-price-controller";
 import { P2pRequestOptions } from "../interfaces";
+import { validatorExecutor } from "../utils/validator-executor";
+import { querySchemaDto } from "../dtos/querySchema.dto";
 import ErrorHandler from "../utils/error-handler";
 
 const currentPriceController = new CurrentPriceController();
-const buyOptions: P2pRequestOptions = {
-  asset: "USDT",
-  fiat: "BOB",
-  tradeType: "BUY",
-};
-const sellOptions: P2pRequestOptions = {
-  asset: "USDT",
-  fiat: "BOB",
-  tradeType: "SELL",
+
+const getCurrentDollarPrice: Handler = async (
+  event: APIGatewayProxyEvent
+): Promise<APIGatewayProxyResult> => {
+  const requestOptions =
+    event.queryStringParameters as unknown as P2pRequestOptions;
+  validatorExecutor(querySchemaDto, event.queryStringParameters);
+  return await currentPriceController.getCurrentDollarPrice(requestOptions);
 };
 
-const getCurrentDollarPrice: Handler =
-  async (): Promise<APIGatewayProxyResult> => {
-    const [buyData, sellData] = await Promise.all([
-      currentPriceController.getCurrentDollarPrice(buyOptions),
-      currentPriceController.getCurrentDollarPrice(sellOptions),
-    ]);
-    return {
-      statusCode: 200,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(
-        {
-          status: "success",
-          message: "Current dollar price",
-          data: { buy: buyData, sell: sellData },
-        },
-        null,
-        2
-      ),
-    };
-  };
+const getCurrentDayDollarPrice: Handler = async (
+  event: APIGatewayProxyEvent
+): Promise<APIGatewayProxyResult> => {
+  validatorExecutor(querySchemaDto, event.queryStringParameters);
+  const requestOptions =
+    event.queryStringParameters as unknown as P2pRequestOptions;
+  return await currentPriceController.getCurrentDayDollarPrice(requestOptions);
+};
 
 module.exports.getCurrentDollarPrice = ErrorHandler(getCurrentDollarPrice);
+module.exports.getCurrentDayDollarPrice = ErrorHandler(
+  getCurrentDayDollarPrice
+);
