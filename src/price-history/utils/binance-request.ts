@@ -15,7 +15,7 @@ export class BinanceRequest {
           body: JSON.stringify({
             fiat: options.fiat || "BOB",
             page: 1,
-            rows: options.rows || 10,
+            rows: options.rows || 20,
             tradeType: options.tradeType,
             asset: options.asset || "USDT",
             countries: [],

@@ -14,11 +14,15 @@ const buyOptions: P2pRequestOptions = {
   asset: "USDT",
   fiat: "BOB",
   tradeType: "BUY",
+  publisherType: null,
+  rows: 10,
 };
 const sellOptions: P2pRequestOptions = {
   asset: "USDT",
   fiat: "BOB",
   tradeType: "SELL",
+  publisherType: null,
+  rows: 10,
 };
 
 const getCurrentDollarPriceScheduled: Handler =
@@ -28,14 +32,13 @@ const getCurrentDollarPriceScheduled: Handler =
       sellOptions
     );
   };
-const setPreviousDayDollarPrice: Handler = async (
-  event: APIGatewayProxyEvent
-): Promise<APIGatewayProxyResult> => {
-  return await priceHistoryController.setPreviousDayDollarPrice(
-    buyOptions,
-    sellOptions
-  );
-};
+const setPreviousDayDollarPrice: Handler =
+  async (): Promise<APIGatewayProxyResult> => {
+    return await priceHistoryController.setPreviousDayDollarPrice(
+      buyOptions,
+      sellOptions
+    );
+  };
 const getPreviousDaysDollarPrice: Handler = async (
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> => {

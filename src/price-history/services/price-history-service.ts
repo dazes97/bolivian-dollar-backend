@@ -1,7 +1,7 @@
 import { P2pParsedResponse, P2pRequestOptions } from "../interfaces";
 import { calculateAveragePrice } from "../utils/value-calculator";
 import { DatabaseAdapater } from "../database/adapter-database";
-import { BinanceRequest } from "../utils/http-request";
+import { BinanceRequest } from "../utils/binance-request";
 import { Datum } from "../interfaces/binance/p2p-original-response.interface";
 export class PriceHistoryService {
   private databaseAdapater: DatabaseAdapater;
