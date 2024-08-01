@@ -15,7 +15,7 @@ export class BinanceRequest {
           body: JSON.stringify({
             fiat: options.fiat || "BOB",
             page: 1,
-            rows: options.rows || 20,
+            rows: options.rows || 15,
             tradeType: options.tradeType,
             asset: options.asset || "USDT",
             countries: [],
@@ -23,7 +23,7 @@ export class BinanceRequest {
             shieldMerchantAds: false,
             filterType: "all",
             periods: [],
-            additionalKycVerifyFilter: 0,
+            additionalKycVerifyFilter: options.additionalKycVerifyFilter || 1,
             publisherType: options.publisherType || "merchant",
             payTypes: [],
             classifies: ["mass", "profession"],

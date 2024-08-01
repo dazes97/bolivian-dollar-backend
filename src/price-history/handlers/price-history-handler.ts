@@ -10,19 +10,22 @@ import { querySchemaDto } from "../dtos/querySchema.dto";
 import ErrorHandler from "../utils/error-handler";
 
 const priceHistoryController = new PriceHistoryController();
+
 const buyOptions: P2pRequestOptions = {
   asset: "USDT",
   fiat: "BOB",
   tradeType: "BUY",
   publisherType: null,
-  rows: 10,
+  rows: 15,
+  additionalKycVerifyFilter: 1,
 };
 const sellOptions: P2pRequestOptions = {
   asset: "USDT",
   fiat: "BOB",
   tradeType: "SELL",
   publisherType: null,
-  rows: 10,
+  rows: 15,
+  additionalKycVerifyFilter: 1,
 };
 
 const getCurrentDollarPriceScheduled: Handler =
