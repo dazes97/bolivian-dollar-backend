@@ -26,7 +26,7 @@ export class BinanceRequest {
             additionalKycVerifyFilter: options.additionalKycVerifyFilter || 1,
             publisherType: options.publisherType || "merchant",
             payTypes: [],
-            classifies: ["mass", "profession"],
+            classifies: ["mass", "profession", "fiat_trade"],
           }),
         });
         if (response.status !== 200) {
