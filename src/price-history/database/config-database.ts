@@ -3,9 +3,9 @@ export const databaseConfig = (): PoolOptions => {
   if (process.env.IS_OFFLINE) {
     console.log("Running in offline mode");
     return {
-      user: "root",
-      database: "bolivian_dollar",
+      database: process.env.DBNAME,
       host: "localhost",
+      user: "root",
       password: "root",
       timezone: "-04:00",
     };
